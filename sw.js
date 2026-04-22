@@ -1,4 +1,4 @@
-const STATIC_CACHE = 'static-v6';
+const STATIC_CACHE = 'static-v7';
 const BASE = new URL('.', self.location).pathname;
 
 const staticAssets = [
