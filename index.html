@@ -736,6 +736,13 @@
             { value: '#f43f5e', hover: '#e11d48' },
         ];
 
+        function applyAccent(value) {
+            const match = ACCENT_COLORS.find(c => c.value === value);
+            if (!match) return;
+            document.documentElement.style.setProperty('--accent', match.value);
+            document.documentElement.style.setProperty('--accent-hover', match.hover);
+        }
+
         function TodoSection() {
             const [todos, setTodos] = useState(() => {
                 const saved = localStorage.getItem('docket-todos');
@@ -1190,6 +1197,7 @@
                             const val = parsed.data['docket-accent'];
                             if (ACCENT_COLORS.some(c => c.value === val)) {
                                 localStorage.setItem('docket-accent', val);
+                                applyAccent(val);
                             }
                         }
                         location.reload();
@@ -1207,6 +1215,8 @@
 
             const handleClear = () => {
                 ['docket-todos', 'docket-notes', 'docket-habits', 'docket-accent'].forEach(k => localStorage.removeItem(k));
+                document.documentElement.style.removeProperty('--accent');
+                document.documentElement.style.removeProperty('--accent-hover');
                 location.reload();
             };
 
@@ -1311,10 +1321,7 @@
             );
 
             useEffect(() => {
-                const match = ACCENT_COLORS.find(c => c.value === accent);
-                if (!match) return;
-                document.documentElement.style.setProperty('--accent', match.value);
-                document.documentElement.style.setProperty('--accent-hover', match.hover);
+                applyAccent(accent);
                 localStorage.setItem('docket-accent', accent);
             }, [accent]);
 
