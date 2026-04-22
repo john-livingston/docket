@@ -446,6 +446,29 @@
             background: var(--surface-hover);
         }
 
+        /* Accent picker */
+        .accent-swatches {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .accent-swatch {
+            width: 22px;
+            height: 22px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            flex-shrink: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .accent-swatch.selected {
+            outline: 2px solid #fff;
+            outline-offset: 1px;
+        }
+
         .settings-overlay {
             position: fixed;
             inset: 0;
@@ -702,6 +725,16 @@
             }
             return streak;
         }
+
+        const ACCENT_COLORS = [
+            { value: '#6366f1', hover: '#4f46e5' },
+            { value: '#8b5cf6', hover: '#7c3aed' },
+            { value: '#3b82f6', hover: '#2563eb' },
+            { value: '#06b6d4', hover: '#0891b2' },
+            { value: '#10b981', hover: '#059669' },
+            { value: '#f97316', hover: '#ea580c' },
+            { value: '#f43f5e', hover: '#e11d48' },
+        ];
 
         function TodoSection() {
             const [todos, setTodos] = useState(() => {
