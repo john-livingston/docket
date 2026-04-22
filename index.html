@@ -620,8 +620,8 @@
             line-height: 1;
             padding: 0;
             flex-shrink: 0;
-            min-width: 28px;
-            min-height: 28px;
+            min-width: 44px;
+            min-height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1008,8 +1008,8 @@
                 localStorage.setItem('docket-habits', JSON.stringify(habits));
             }, [habits]);
 
-            const days = getLast28Days();
-            const todayStr = formatDate(new Date());
+            const days = useMemo(() => getLast28Days(), []);
+            const todayStr = useMemo(() => formatDate(new Date()), []);
 
             const toggleDate = (habitId, dateStr) => {
                 setHabits(habits.map(h => {
