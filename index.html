@@ -1138,7 +1138,7 @@
             );
         }
 
-        function SettingsModal({ onClose }) {
+        function SettingsModal({ onClose, accent, setAccent }) {
             const [importError, setImportError] = useState('');
             const [clearConfirm, setClearConfirm] = useState(false);
 
@@ -1151,6 +1151,7 @@
                         'docket-todos': JSON.parse(localStorage.getItem('docket-todos') || '[]'),
                         'docket-notes': JSON.parse(localStorage.getItem('docket-notes') || '[]'),
                         'docket-habits': JSON.parse(localStorage.getItem('docket-habits') || '[]'),
+                        'docket-accent': localStorage.getItem('docket-accent') || ACCENT_COLORS[0].value,
                     }
                 };
                 const json = JSON.stringify(payload, null, 2);
@@ -1179,7 +1180,7 @@
                     try {
                         const parsed = JSON.parse(ev.target.result);
                         if (!parsed.data || typeof parsed.data !== 'object' || Array.isArray(parsed.data)) throw new Error();
-                        const ALLOWED_KEYS = ['docket-todos', 'docket-notes', 'docket-habits'];
+                        const ALLOWED_KEYS = ['docket-todos', 'docket-notes', 'docket-habits', 'docket-accent'];
                         ALLOWED_KEYS.forEach(key => {
                             if (key in parsed.data) {
                                 localStorage.setItem(key, JSON.stringify(parsed.data[key]));
@@ -1199,7 +1200,7 @@
             };
 
             const handleClear = () => {
-                ['docket-todos', 'docket-notes', 'docket-habits'].forEach(k => localStorage.removeItem(k));
+                ['docket-todos', 'docket-notes', 'docket-habits', 'docket-accent'].forEach(k => localStorage.removeItem(k));
                 location.reload();
             };
 
@@ -1216,6 +1217,24 @@
                             </button>
                         </div>
                         <div className="settings-body">
+
+                            <div className="settings-section-label">Appearance</div>
+                            <div className="card" style={{marginBottom: '16px'}}>
+                                <div className="settings-row">
+                                    <span>Accent color</span>
+                                    <div className="accent-swatches">
+                                        {ACCENT_COLORS.map(color => (
+                                            <button
+                                                key={color.value}
+                                                className={`accent-swatch${accent === color.value ? ' selected' : ''}`}
+                                                style={{ background: color.value }}
+                                                aria-label={`Accent color ${color.value}`}
+                                                onClick={() => setAccent(color.value)}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
 
                             <div className="settings-section-label">Data Management</div>
                             <div className="card">
