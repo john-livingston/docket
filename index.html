@@ -1119,6 +1119,7 @@
                     data: {
                         'docket-todos': JSON.parse(localStorage.getItem('docket-todos') || '[]'),
                         'docket-notes': JSON.parse(localStorage.getItem('docket-notes') || '[]'),
+                        'docket-habits': JSON.parse(localStorage.getItem('docket-habits') || '[]'),
                     }
                 };
                 const json = JSON.stringify(payload, null, 2);
@@ -1147,7 +1148,7 @@
                     try {
                         const parsed = JSON.parse(ev.target.result);
                         if (!parsed.data || typeof parsed.data !== 'object' || Array.isArray(parsed.data)) throw new Error();
-                        const ALLOWED_KEYS = ['docket-todos', 'docket-notes'];
+                        const ALLOWED_KEYS = ['docket-todos', 'docket-notes', 'docket-habits'];
                         ALLOWED_KEYS.forEach(key => {
                             if (key in parsed.data) {
                                 localStorage.setItem(key, JSON.stringify(parsed.data[key]));
@@ -1167,7 +1168,7 @@
             };
 
             const handleClear = () => {
-                ['docket-todos', 'docket-notes'].forEach(k => localStorage.removeItem(k));
+                ['docket-todos', 'docket-notes', 'docket-habits'].forEach(k => localStorage.removeItem(k));
                 location.reload();
             };
 
