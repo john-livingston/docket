@@ -1180,12 +1180,18 @@
                     try {
                         const parsed = JSON.parse(ev.target.result);
                         if (!parsed.data || typeof parsed.data !== 'object' || Array.isArray(parsed.data)) throw new Error();
-                        const ALLOWED_KEYS = ['docket-todos', 'docket-notes', 'docket-habits', 'docket-accent'];
+                        const ALLOWED_KEYS = ['docket-todos', 'docket-notes', 'docket-habits'];
                         ALLOWED_KEYS.forEach(key => {
                             if (key in parsed.data) {
                                 localStorage.setItem(key, JSON.stringify(parsed.data[key]));
                             }
                         });
+                        if ('docket-accent' in parsed.data) {
+                            const val = parsed.data['docket-accent'];
+                            if (ACCENT_COLORS.some(c => c.value === val)) {
+                                localStorage.setItem('docket-accent', val);
+                            }
+                        }
                         location.reload();
                     } catch {
                         setImportError('Invalid backup file — please choose a valid docket export.');
