@@ -559,6 +559,43 @@
     <script type="text/babel">
         const { useState, useEffect, useMemo } = React;
 
+        function formatDate(date) {
+            const y = date.getFullYear();
+            const m = String(date.getMonth() + 1).padStart(2, '0');
+            const d = String(date.getDate()).padStart(2, '0');
+            return `${y}-${m}-${d}`;
+        }
+
+        function getLast28Days() {
+            const days = [];
+            const today = new Date();
+            for (let i = 27; i >= 0; i--) {
+                const d = new Date(today);
+                d.setDate(today.getDate() - i);
+                days.push(formatDate(d));
+            }
+            return days;
+        }
+
+        function computeStreak(completedDates) {
+            const set = new Set(completedDates);
+            const today = new Date();
+            const todayStr = formatDate(today);
+            let streak = 0;
+            let current = new Date(today);
+            // Grace period: if today not yet done, start counting from yesterday
+            if (!set.has(todayStr)) {
+                current.setDate(current.getDate() - 1);
+            }
+            while (true) {
+                const dateStr = formatDate(current);
+                if (!set.has(dateStr)) break;
+                streak++;
+                current.setDate(current.getDate() - 1);
+            }
+            return streak;
+        }
+
         function TodoSection() {
             const [todos, setTodos] = useState(() => {
                 const saved = localStorage.getItem('docket-todos');
