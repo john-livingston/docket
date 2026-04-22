@@ -996,6 +996,117 @@
             );
         }
 
+        function HabitsSection() {
+            const [habits, setHabits] = useState(() => {
+                const saved = localStorage.getItem('docket-habits');
+                return saved ? JSON.parse(saved) : [];
+            });
+            const [editMode, setEditMode] = useState(false);
+            const [input, setInput] = useState('');
+
+            useEffect(() => {
+                localStorage.setItem('docket-habits', JSON.stringify(habits));
+            }, [habits]);
+
+            const days = getLast28Days();
+            const todayStr = formatDate(new Date());
+
+            const toggleDate = (habitId, dateStr) => {
+                setHabits(habits.map(h => {
+                    if (h.id !== habitId) return h;
+                    const has = h.completedDates.includes(dateStr);
+                    return {
+                        ...h,
+                        completedDates: has
+                            ? h.completedDates.filter(d => d !== dateStr)
+                            : [...h.completedDates, dateStr]
+                    };
+                }));
+            };
+
+            const addHabit = (e) => {
+                e.preventDefault();
+                if (!input.trim()) return;
+                setHabits([...habits, { id: Date.now(), name: input.trim(), completedDates: [] }]);
+                setInput('');
+            };
+
+            const deleteHabit = (id) => {
+                setHabits(habits.filter(h => h.id !== id));
+            };
+
+            return (
+                <div className="container">
+                    <div className="habits-header">
+                        <button
+                            className={`btn-edit-mode${editMode ? ' done' : ''}`}
+                            onClick={() => { setEditMode(!editMode); setInput(''); }}
+                        >
+                            {editMode ? 'Done' : 'Edit'}
+                        </button>
+                        <h1>Habits</h1>
+                    </div>
+
+                    {editMode && (
+                        <div className="card" style={{marginBottom: '16px', borderColor: 'var(--accent)'}}>
+                            <form onSubmit={addHabit} className="input-row">
+                                <input
+                                    type="text"
+                                    value={input}
+                                    onChange={e => setInput(e.target.value)}
+                                    placeholder="New habit name..."
+                                    autoFocus
+                                />
+                                <button type="submit" className="btn-add">Add</button>
+                            </form>
+                        </div>
+                    )}
+
+                    {habits.length === 0 ? (
+                        <div className="empty-state">
+                            {editMode ? 'Add your first habit above.' : 'Tap Edit to add your first habit.'}
+                        </div>
+                    ) : (
+                        habits.map(habit => {
+                            const streak = computeStreak(habit.completedDates);
+                            return (
+                                <div key={habit.id} className="card habit-card">
+                                    <div className="habit-card-header">
+                                        <div className="habit-card-left">
+                                            {editMode && (
+                                                <button
+                                                    className="btn-habit-delete"
+                                                    onClick={() => deleteHabit(habit.id)}
+                                                >
+                                                    ⊗
+                                                </button>
+                                            )}
+                                            <span className="habit-name">{habit.name}</span>
+                                        </div>
+                                        <span className="habit-streak">🔥 {streak}</span>
+                                    </div>
+                                    <div className="habit-grid">
+                                        {days.map(dateStr => {
+                                            const completed = habit.completedDates.includes(dateStr);
+                                            const isToday = dateStr === todayStr;
+                                            const isFuture = dateStr > todayStr;
+                                            return (
+                                                <div
+                                                    key={dateStr}
+                                                    className={`habit-cell${completed ? ' completed' : ''}${isToday ? ' today' : ''}${isFuture ? ' future' : ''}`}
+                                                    onClick={() => toggleDate(habit.id, dateStr)}
+                                                />
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            );
+                        })
+                    )}
+                </div>
+            );
+        }
+
         function SettingsModal({ onClose }) {
             const [importError, setImportError] = useState('');
             const [clearConfirm, setClearConfirm] = useState(false);
