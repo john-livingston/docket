@@ -548,6 +548,115 @@
             color: var(--danger);
             font-size: 13px;
         }
+
+        /* Habits */
+        .habits-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .habits-header h1 {
+            margin: 0;
+        }
+
+        .btn-edit-mode {
+            position: absolute;
+            left: 0;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+            font-family: inherit;
+            cursor: pointer;
+            padding: 4px 0;
+            min-height: 44px;
+            transition: color 0.15s;
+        }
+
+        .btn-edit-mode.done {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .habit-card {
+            margin-bottom: 12px;
+        }
+
+        .habit-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px 12px;
+        }
+
+        .habit-card-left {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .habit-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .habit-streak {
+            font-size: 14px;
+            color: var(--text-primary);
+            flex-shrink: 0;
+        }
+
+        .btn-habit-delete {
+            background: transparent;
+            border: none;
+            color: var(--danger);
+            font-size: 17px;
+            cursor: pointer;
+            line-height: 1;
+            padding: 0;
+            flex-shrink: 0;
+            min-width: 28px;
+            min-height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .habit-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            padding: 0 16px 14px;
+        }
+
+        .habit-cell {
+            aspect-ratio: 1;
+            background: var(--border);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.1s;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .habit-cell.completed {
+            background: var(--accent);
+        }
+
+        .habit-cell.today {
+            outline: 2px solid rgba(245, 245, 245, 0.45);
+            outline-offset: -2px;
+        }
+
+        .habit-cell.future {
+            opacity: 0;
+            cursor: default;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
